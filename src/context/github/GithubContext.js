@@ -17,6 +17,8 @@ export const GithubProvider = ({children}) =>{
 
 
   async function searchUser(text){
+    console.log(text, typeof text)
+
     setLoading()
 
     const params = new URLSearchParams({
@@ -30,7 +32,7 @@ export const GithubProvider = ({children}) =>{
     })
     const { items } = await response.json()
 
-    console.log(items)
+    console.log(response,"items is not def")
     
 
     dispatch({
