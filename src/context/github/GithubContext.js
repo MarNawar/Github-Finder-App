@@ -9,7 +9,9 @@ const GithubToken = process.env.REACT_APP_GITHUB_TOKEN
 
 export const GithubProvider = ({children}) =>{
   const initialState = {
+    user: {},
     users : [],
+    repos: [],
     loading: false,
   }
 
@@ -17,7 +19,6 @@ export const GithubProvider = ({children}) =>{
 
 
   async function searchUser(text){
-    console.log(text, typeof text)
 
     setLoading()
 
@@ -32,12 +33,55 @@ export const GithubProvider = ({children}) =>{
     })
     const { items } = await response.json()
 
-    console.log(response,"items is not def")
+    //console.log(items,"items is not def")
     
 
     dispatch({
       type: 'GET_USERS',
       payload: items,
+    })
+  }
+
+  async function getUser(login){
+    setLoading()
+
+    //console.log(login)
+
+    const response = await fetch (`${GithubUrl}/users/${login}`,{
+      headers:{
+        Authorization:`token ${GithubToken}`,
+      },
+    })
+    const data = await response.json()
+
+    //console.log(data,"items is not def")
+    
+
+    dispatch({
+      type: 'GET_USER',
+      payload: data,
+    })
+  }
+
+  async function getUserRepos(login){
+
+    setLoading()
+
+    const params = new URLSearchParams({
+      sort: 'created',
+    })
+    const response = await fetch (`${GithubUrl}/users/${login}/repos?${params}`,{
+      headers:{
+        Authorization:`token ${GithubToken}`,
+      },
+    })
+
+    const data = await response.json()
+
+
+    dispatch({
+      type: 'GET_REPOS',
+      payload: data,
     })
   }
 
@@ -57,8 +101,12 @@ export const GithubProvider = ({children}) =>{
   return <GithubContext.Provider value={{
     users: state.users,
     loading: state.loading,
+    user: state.user,
+    repos: state.repos,
     searchUser,
-    clearUsers
+    clearUsers,
+    getUser,
+    getUserRepos
   }}>
     {children}
   </GithubContext.Provider>

@@ -1,5 +1,6 @@
 import {BrowserRouter as Router,Routes, Route} from 'react-router-dom'
 import Home from './Pages/Home'
+import User from './Pages/User'
 import About from './Pages/About'
 import NotFound from './Pages/NotFound'
 import Footer from './component/layout/Footer'
@@ -20,6 +21,7 @@ function App() {
               <Routes>
                 <Route path ='/' element={<Home/>}/>
                 <Route path ='/about' element={<About/>}/>
+                <Route path ='/user/:login' element={<User/>}/>
                 <Route path ='/notfound' element={<NotFound/>}/>
                 <Route path ='/*' element={<NotFound/>}/>
               </Routes>
