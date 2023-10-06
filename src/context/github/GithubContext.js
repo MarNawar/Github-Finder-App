@@ -4,8 +4,8 @@ import githubReducer from "./GithubReducer";
 const GithubContext = createContext()
 
 
-const GithubUrl = "https://api.github.com"
-//const GithubToken = process.env.REACT_APP_GITHUB_TOKEN
+const GithubUrl = process.env.REACT_APP_GITHUB_URL
+const GithubToken = process.env.REACT_APP_GITHUB_TOKEN
 
 export const GithubProvider = ({children}) =>{
   const initialState = {
@@ -26,7 +26,11 @@ export const GithubProvider = ({children}) =>{
       q:text
     })
 
-    const response = await fetch (`${GithubUrl}/search/users?${params}`)
+    const response = await fetch (`${GithubUrl}/search/users?${params}`,{
+      headers:{
+        Authorization:`token ${GithubToken}`,
+      },
+    })
     const { items } = await response.json()
 
     //console.log(items,"items is not def")
@@ -43,7 +47,11 @@ export const GithubProvider = ({children}) =>{
 
     //console.log(login)
 
-    const response = await fetch (`${GithubUrl}/users/${login}`)
+    const response = await fetch (`${GithubUrl}/users/${login}`,{
+      headers:{
+        Authorization:`token ${GithubToken}`,
+      },
+    })
     const data = await response.json()
 
     //console.log(data,"items is not def")
@@ -62,7 +70,11 @@ export const GithubProvider = ({children}) =>{
     const params = new URLSearchParams({
       sort: 'created',
     })
-    const response = await fetch (`${GithubUrl}/users/${login}/repos?${params}`)
+    const response = await fetch (`${GithubUrl}/users/${login}/repos?${params}`,{
+      headers:{
+        Authorization:`token ${GithubToken}`,
+      },
+    })
 
     const data = await response.json()
 
